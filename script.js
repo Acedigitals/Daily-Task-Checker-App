@@ -7,6 +7,7 @@ const resetButton = document.getElementById("resetButton");
 const undoButton = document.getElementById("undoButton");
 const celebration = document.getElementById("celebration");
 const themeSelect = document.getElementById("themeSelect");
+const installButton = document.getElementById("installButton");
 
 const defaultTaskInput = document.getElementById("defaultTaskInput");
 const addDefaultButton = document.getElementById("addDefaultButton");
@@ -18,6 +19,7 @@ let draggedTaskId = null;
 let draggedDefaultId = null;
 let midnightTimer;
 let lastDeletedState = null;
+let deferredInstallPrompt = null;
 const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
 
 const defaultTaskTexts = [
@@ -566,3 +568,25 @@ if ("serviceWorker" in navigator) {
       });
   });
 }
+
+window.addEventListener("beforeinstallprompt", event => {
+  event.preventDefault();
+  deferredInstallPrompt = event;
+  installButton.hidden = false;
+});
+
+installButton.addEventListener("click", async () => {
+  if (!deferredInstallPrompt) {
+    return;
+  }
+
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
+  installButton.hidden = true;
+});
+
+window.addEventListener("appinstalled", () => {
+  deferredInstallPrompt = null;
+  installButton.hidden = true;
+});

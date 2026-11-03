@@ -19,6 +19,13 @@ h1 {
   text-align: center;
 }
 
+#installButton {
+  display: block;
+  margin: -16px auto 20px;
+  color: white;
+  background: var(--primary, #2563eb);
+}
+
 input,
 button {
   padding: 8px;

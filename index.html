@@ -5,10 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Task Checker</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
 
     <h1>Daily Task Checker</h1>
+
+    <label for="themeSelect">Theme</label>
+    <select id="themeSelect">
+        <option value="system">System</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+    </select>
 
     <details id="defaultSettings">
         <summary>Edit default tasks</summary>
@@ -19,8 +27,14 @@
 
     <input type="text" id="taskInput" placeholder="Enter a task">
     <button id="addButton">Add</button>
+    <p id="todayDate"></p>
+    <div class="task-actions">
+        <button id="resetButton">Reset today</button>
+        <button id="undoButton" hidden>Undo last delete</button>
+    </div>
     <ul id="taskList"></ul>
     <p id="progress"></p>
+    <p id="celebration" role="status" aria-live="polite"></p>
 
     <script src="script.js"></script>
 

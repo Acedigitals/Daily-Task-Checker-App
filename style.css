@@ -1,115 +1,14 @@
-body {
-  max-width: 600px;
-  margin: 40px auto;
-  font-family: Arial, sans-serif;
-  background: #f2f2f2;
-}
-
-input, button {
-  padding: 8px;
-}
-
-
-ul {
-  padding: 0;
-  list-style: none;
-}
-
-li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 10px 0;
-}
-
-li button {
-  margin-left: auto;
-}
-
-body {
-  padding: 24px;
-}
-
-h1 {
-  text-align: center;
-}
-
-#taskInput {
-  width: 70%;
+* {
   box-sizing: border-box;
 }
 
-#progress {
-  font-weight: bold;
-}
-
-.completed {
-  color: #888;
-  text-decoration: line-through;
-}
-
-button {
-  cursor: pointer;
-}
-
-#addButton {
-  background: #2563eb;
-  color: white;
-  border: none;
-  border-radius: 6px;
-}
-
-#addButton:hover {
-  background: #1d4ed8;
-}
-
-li button {
-  border: none;
-  border-radius: 4px;
-  background: #dc2626;
-  color: white;
-}
-
-#taskInput {
-  border: 1px solid #bbb;
-  border-radius: 6px;
-}
-
-#taskInput:focus {
-  outline: 2px solid #2563eb;
-}
-
-#progress {
-  color: #555;
-  text-align: center;
-}
-
-.drag-handle {
-  cursor: grab;
-  font-weight: bold;
-}
-
-#defaultSettings {
-  margin-bottom: 24px;
-}
-
-#defaultSettings summary {
-  cursor: pointer;
-  font-weight: bold;
-  padding: 10px 0;
-}
-
-#defaultSettings[open] summary {
-  margin-bottom: 12px;
-}
-
-#defaultTaskList li {
-  cursor: grab;
-}
-
 body {
+  max-width: 600px;
   min-height: 100vh;
+  margin: 40px auto;
+  padding: 24px;
   color: #1f2937;
+  font-family: Arial, sans-serif;
   background: linear-gradient(135deg, #dbeafe, #f8fafc);
 }
 
@@ -117,38 +16,179 @@ h1 {
   margin-bottom: 28px;
   color: #1e3a8a;
   font-size: 2.2rem;
+  text-align: center;
 }
 
-section,
+input,
+button {
+  padding: 8px;
+}
+
+input {
+  border: 1px solid #bbb;
+  border-radius: 6px;
+}
+
+input:focus {
+  outline: 2px solid #2563eb;
+}
+
+button {
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+#taskInput,
+#defaultSettings input {
+  width: 70%;
+}
+
+#addButton,
+#addDefaultButton {
+  color: white;
+  background: #2563eb;
+}
+
+#addButton:hover,
+#addDefaultButton:hover {
+  background: #1d4ed8;
+}
+
+#defaultSettings,
 #taskList,
 #progress {
-  background: rgba(255, 255, 255, 0.9);
   border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
 }
 
-section {
-  padding: 18px;
+#defaultSettings {
   margin-bottom: 24px;
+  padding: 18px;
+}
+
+#defaultSettings summary {
+  padding: 10px 0;
+  color: #1e3a8a;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#defaultSettings[open] summary {
+  margin-bottom: 12px;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
 }
 
 #taskList {
-  padding: 16px;
   margin-top: 20px;
+  padding: 16px;
+}
+
+#todayDate {
+  margin: 18px 0 8px;
+  color: #475569;
+  font-weight: bold;
+  text-align: center;
+}
+
+.task-actions {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+#resetButton,
+#undoButton {
+  color: #1e3a8a;
+  background: #dbeafe;
+}
+
+#resetButton:hover,
+#undoButton:hover {
+  background: #bfdbfe;
+}
+
+#defaultTaskList {
+  margin-top: 16px;
 }
 
 li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
   padding: 12px;
-  background: #f8fafc;
   border-radius: 8px;
+  background: #f8fafc;
 }
 
 li:hover {
   background: #eff6ff;
 }
 
+li button:last-child {
+  margin-left: auto;
+  color: white;
+  background: #dc2626;
+}
+
+.move-button {
+  display: block;
+  width: 22px;
+  min-width: 22px;
+  padding: 2px;
+  color: #1e3a8a;
+  background: #dbeafe;
+  font-size: 0.6rem;
+  line-height: 1;
+}
+
+.move-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.move-button:hover:not(:disabled) {
+  background: #bfdbfe;
+}
+
+#defaultTaskList li {
+  background: #eef2ff;
+}
+
+.drag-handle {
+  font-weight: bold;
+  cursor: grab;
+}
+
+.completed {
+  color: #888;
+  text-decoration: line-through;
+}
+
 #progress {
   padding: 14px;
+  color: #555;
+  font-weight: bold;
+  text-align: center;
+}
+
+#celebration {
+  color: #166534;
+  font-weight: bold;
+  text-align: center;
 }
 
 @media (max-width: 500px) {
@@ -157,12 +197,23 @@ li:hover {
     padding: 16px;
   }
 
-  #taskInput {
+  #taskInput,
+  #defaultSettings input {
     width: 100%;
     margin-bottom: 8px;
   }
 
-  #addButton {
+  #addButton,
+  #addDefaultButton {
+    width: 100%;
+  }
+
+  .task-actions {
+    flex-direction: column;
+  }
+
+  #resetButton,
+  #undoButton {
     width: 100%;
   }
 
@@ -171,20 +222,153 @@ li:hover {
   }
 }
 
+:root {
+  color-scheme: light;
+  --page-text: #1f2937;
+  --page-background: linear-gradient(135deg, #dbeafe, #f8fafc);
+  --heading-text: #1e3a8a;
+  --surface: rgba(255, 255, 255, 0.9);
+  --task-background: #f8fafc;
+  --default-task-background: #eef2ff;
+  --hover-background: #eff6ff;
+  --muted-text: #475569;
+  --border: #bbb;
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --secondary: #dbeafe;
+  --secondary-hover: #bfdbfe;
+  --danger: #dc2626;
+  --completed-text: #888;
+  --success-text: #166534;
+  --shadow: rgba(15, 23, 42, 0.08);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page-text: #e5e7eb;
+  --page-background: linear-gradient(135deg, #111827, #1f2937);
+  --heading-text: #bfdbfe;
+  --surface: rgba(31, 41, 55, 0.94);
+  --task-background: #374151;
+  --default-task-background: #312e81;
+  --hover-background: #4b5563;
+  --muted-text: #cbd5e1;
+  --border: #6b7280;
+  --primary: #3b82f6;
+  --primary-hover: #60a5fa;
+  --secondary: #1e3a8a;
+  --secondary-hover: #2563eb;
+  --danger: #ef4444;
+  --completed-text: #9ca3af;
+  --success-text: #86efac;
+  --shadow: rgba(0, 0, 0, 0.25);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] {
+    color-scheme: dark;
+    --page-text: #e5e7eb;
+    --page-background: linear-gradient(135deg, #111827, #1f2937);
+    --heading-text: #bfdbfe;
+    --surface: rgba(31, 41, 55, 0.94);
+    --task-background: #374151;
+    --default-task-background: #312e81;
+    --hover-background: #4b5563;
+    --muted-text: #cbd5e1;
+    --border: #6b7280;
+    --primary: #3b82f6;
+    --primary-hover: #60a5fa;
+    --secondary: #1e3a8a;
+    --secondary-hover: #2563eb;
+    --danger: #ef4444;
+    --completed-text: #9ca3af;
+    --success-text: #86efac;
+    --shadow: rgba(0, 0, 0, 0.25);
+  }
+}
+
+body {
+  color: var(--page-text);
+  background: var(--page-background);
+}
+
+h1,
 #defaultSettings summary {
-  color: #1e3a8a;
-  font-size: 1.1rem;
+  color: var(--heading-text);
 }
 
-#defaultSettings input {
-  width: 70%;
-  box-sizing: border-box;
+input,
+#themeSelect {
+  color: var(--page-text);
+  border-color: var(--border);
+  background: var(--surface);
 }
 
-#defaultTaskList {
-  margin-top: 16px;
+input:focus {
+  outline-color: var(--primary);
+}
+
+#themeSelect {
+  display: block;
+  margin: 0 auto 24px;
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+#addButton,
+#addDefaultButton {
+  background: var(--primary);
+}
+
+#addButton:hover,
+#addDefaultButton:hover {
+  background: var(--primary-hover);
+}
+
+#defaultSettings,
+#taskList,
+#progress {
+  background: var(--surface);
+  box-shadow: 0 8px 20px var(--shadow);
+}
+
+li {
+  background: var(--task-background);
+}
+
+li:hover {
+  background: var(--hover-background);
 }
 
 #defaultTaskList li {
-  background: #eef2ff;
+  background: var(--default-task-background);
+}
+
+.move-button,
+#resetButton,
+#undoButton {
+  color: var(--heading-text);
+  background: var(--secondary);
+}
+
+.move-button:hover:not(:disabled),
+#resetButton:hover,
+#undoButton:hover {
+  background: var(--secondary-hover);
+}
+
+li button:last-child {
+  background: var(--danger);
+}
+
+.completed {
+  color: var(--completed-text);
+}
+
+#progress {
+  color: var(--muted-text);
+}
+
+#celebration {
+  color: var(--success-text);
 }

@@ -121,6 +121,21 @@ function loadTasks() {
   }
 }
 
+function syncDailyOrderWithDefaults() {
+  const order = new Map(
+    defaultTasks.map((text, index) => [text, index])
+  );
+
+  tasks.sort((a, b) => {
+    const aOrder = order.has(a.text) ? order.get(a.text) : Infinity;
+    const bOrder = order.has(b.text) ? order.get(b.text) : Infinity;
+    return aOrder - bOrder;
+  });
+
+  saveTasks();
+  render();
+}
+
 function renderDefaultTasks() {
   defaultTaskList.innerHTML = "";
 
@@ -147,6 +162,7 @@ function renderDefaultTasks() {
 
       defaultTasks.splice(targetIndex, 0, movedDefault);
       saveDefaultTasks();
+      syncDailyOrderWithDefaults();
       renderDefaultTasks();
     });
 
@@ -154,10 +170,13 @@ function renderDefaultTasks() {
     deleteButton.textContent = "Delete";
 
     deleteButton.addEventListener("click", () => {
-      defaultTasks.splice(index, 1);
-      saveDefaultTasks();
-      renderDefaultTasks();
-    });
+  defaultTasks.splice(index, 1);
+  tasks = tasks.filter(task => task.text !== text);
+  saveDefaultTasks();
+  saveTasks();
+  renderDefaultTasks();
+  render();
+});
 
     item.append(handle, text, deleteButton);
     defaultTaskList.appendChild(item);
@@ -183,8 +202,16 @@ addDefaultButton.addEventListener("click", function () {
   }
 
   defaultTasks.push(text);
+  tasks.push({
+    id: Date.now(),
+    text: text,
+    done: false
+  });
+
   saveDefaultTasks();
+  saveTasks();
   renderDefaultTasks();
+  render();
   defaultTaskInput.value = "";
 });
 

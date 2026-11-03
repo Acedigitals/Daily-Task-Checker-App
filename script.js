@@ -80,6 +80,7 @@ function moveTask(index, direction) {
     return;
   }
 
+  clearUndoState();
   [tasks[index], tasks[newIndex]] = [tasks[newIndex], tasks[index]];
   saveTasks();
   render();
@@ -92,6 +93,7 @@ function moveDefaultTask(index, direction) {
     return;
   }
 
+  clearUndoState();
   [defaultTasks[index], defaultTasks[newIndex]] = [
     defaultTasks[newIndex],
     defaultTasks[index]
@@ -108,6 +110,7 @@ function addTask() {
     return;
   }
 
+  clearUndoState();
   tasks.push({
     id: `task-${Date.now()}-${Math.random().toString(36).slice(2)}`,
     text,
@@ -134,6 +137,7 @@ function addDefaultTask() {
     return;
   }
 
+  clearUndoState();
   const defaultTask = createDefaultTask(text, defaultTasks.length);
   defaultTasks.push(defaultTask);
   tasks.push({
@@ -227,6 +231,7 @@ function render() {
       }
 
       const [movedTask] = tasks.splice(from, 1);
+      clearUndoState();
       tasks.splice(from < to ? to - 1 : to, 0, movedTask);
       saveTasks();
       render();
@@ -243,6 +248,7 @@ function render() {
     checkbox.checked = task.done;
     checkbox.setAttribute("aria-label", `Mark ${task.text} as complete`);
     checkbox.addEventListener("change", () => {
+      clearUndoState();
       task.done = checkbox.checked;
       saveTasks();
       render();
@@ -329,6 +335,7 @@ function renderDefaultTasks() {
       }
 
       const [movedDefault] = defaultTasks.splice(from, 1);
+      clearUndoState();
       defaultTasks.splice(from < to ? to - 1 : to, 0, movedDefault);
       saveDefaultTasks();
       syncDailyOrderWithDefaults();
@@ -434,11 +441,16 @@ function loadDefaultTasks() {
           typeof task.text === "string")
     )
   ) {
-    defaultTasks = savedDefaults.map((task, index) =>
-      typeof task === "string"
-        ? createDefaultTask(task, index)
-        : task
-    );
+    defaultTasks = savedDefaults.map((task, index) => {
+      if (typeof task === "string") {
+        return createDefaultTask(task, index);
+      }
+
+      return {
+        id: String(task.id),
+        text: task.text
+      };
+    });
     saveDefaultTasks();
     return;
   }
@@ -459,14 +471,17 @@ function loadTasks() {
     savedTasks.every(
       task =>
         task &&
-        typeof task.id === "string" &&
+        (typeof task.id === "string" || typeof task.id === "number") &&
         typeof task.text === "string" &&
         typeof task.done === "boolean"
     )
   ) {
     tasks = savedTasks.map(task => ({
       ...task,
-      id: String(task.id)
+      id: String(task.id),
+      defaultId: task.defaultId
+        ? String(task.defaultId)
+        : task.defaultId
     }));
     const defaultByText = new Map(
       defaultTasks.map(defaultTask => [defaultTask.text, defaultTask])
@@ -524,6 +539,18 @@ function scheduleMidnightReset() {
   }, nextMidnight.getTime() - now.getTime());
 }
 
+function refreshForCurrentDay() {
+  if (localStorage.getItem("tasksDate") === getTodayKey()) {
+    return;
+  }
+
+  tasks = createDefaultTasks();
+  saveTasks();
+  render();
+  renderTodayDate();
+  clearUndoState();
+}
+
 addButton.addEventListener("click", addTask);
 taskInput.addEventListener("keydown", event => {
   if (event.key === "Enter") {
@@ -540,6 +567,11 @@ defaultTaskInput.addEventListener("keydown", event => {
 
 resetButton.addEventListener("click", resetToday);
 undoButton.addEventListener("click", undoLastDelete);
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) {
+    refreshForCurrentDay();
+  }
+});
 themeSelect.addEventListener("change", () => {
   applyTheme(themeSelect.value);
 });

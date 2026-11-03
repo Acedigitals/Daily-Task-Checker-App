@@ -35,12 +35,8 @@ self.addEventListener("fetch", event => {
   }
 
   event.respondWith(
-    caches.match(event.request).then(cachedResponse => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-
-      return fetch(event.request).then(networkResponse => {
+    fetch(event.request)
+      .then(networkResponse => {
         if (!networkResponse || networkResponse.status !== 200) {
           return networkResponse;
         }
@@ -50,7 +46,15 @@ self.addEventListener("fetch", event => {
           cache.put(event.request, responseToCache);
         });
         return networkResponse;
-      });
-    })
+      })
+      .catch(() =>
+        caches.match(event.request).then(
+          cachedResponse =>
+            cachedResponse ||
+            (event.request.mode === "navigate"
+              ? caches.match("./index.html")
+              : Response.error())
+        )
+      )
   );
 });
